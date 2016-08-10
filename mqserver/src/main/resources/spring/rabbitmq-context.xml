@@ -1,0 +1,32 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+	xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+	http://www.springframework.org/schema/rabbit/spring-rabbit-1.4.xsd
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-4.1.xsd">
+
+	<!-- 定义RabbitMQ的连接工厂 -->
+	<rabbit:connection-factory id="connectionFactory"
+		host="127.0.0.1" port="5672" username="eaphone" password="eaphone"
+		virtual-host="/eaphone" />
+
+	<!-- MQ的管理，包括队列、交换器等 -->
+	<rabbit:admin connection-factory="connectionFactory" />
+	
+	
+	
+	
+	<!-- 定义交换器，自动声明 -->
+	<rabbit:direct-exchange name="testexchange"
+		auto-declare="true" durable="true" >
+		
+	</rabbit:direct-exchange>	
+
+	<!-- 定义Rabbit模板，指定连接工厂以及定义exchange -->
+	<rabbit:template id="template" connection-factory="connectionFactory"
+		exchange="testexchange" message-converter="simpleMessageConverter"/>
+		<bean class="org.springframework.amqp.support.converter.SimpleMessageConverter" id="simpleMessageConverter">
+        <property name="createMessageIds" value="true"/>
+    </bean>
+	
+</beans>
